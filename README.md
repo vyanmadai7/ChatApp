@@ -1,3 +1,5 @@
+## Real time Chat App
+
 A simple real time chat application built using Django, AJAX, jQuery, and clean HTML/CSS.
 
 ## Features
@@ -14,7 +16,7 @@ pip install django
 python manage.py migrate
 python manage.py runserver
 
-Open: http://127.0.0.1:8000/
+## Open: http://127.0.0.1:8000/
 
 ## Tech Used
 Django
