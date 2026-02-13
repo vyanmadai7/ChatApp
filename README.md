@@ -15,10 +15,10 @@ New messages scroll down automatically
 Very lightweight   no WebSockets required
 
 ## How to Run
-git clone https://github.com/vyanmadai7/ChatApp
-cd ChatApp
-pip install django
-python manage.py migrate
+git clone https://github.com/vyanmadai7/ChatApp<br>
+cd ChatApp<br>
+pip install django<br>
+python manage.py migrate<br>
 python manage.py runserver
 
 Then open your browser and go to:
