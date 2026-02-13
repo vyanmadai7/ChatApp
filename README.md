@@ -2,7 +2,7 @@
 
 This is a simple chat app that updates messages in real time. It is built with Django, AJAX, jQuery, and clean HTML/CSS.
 
-Features
+## Features
 
 Messages update automatically in real time
 
@@ -12,9 +12,9 @@ Simple and modern user interface
 
 New messages scroll down automatically
 
-Very lightweight — no WebSockets required
+Very lightweight   no WebSockets required
 
-How to Run
+## How to Run
 git clone https://github.com/vyanmadai7/ChatApp
 cd ChatApp
 pip install django
@@ -24,7 +24,7 @@ python manage.py runserver
 Then open your browser and go to:
 http://127.0.0.1:8000/
 
-Technologies Used
+## Technologies Used
 
 Django
 
@@ -36,7 +36,7 @@ HTML
 
 CSS
 
-License (MIT)
+## License (MIT)
 MIT License
 
 Copyright (c) 2026 Vyan
