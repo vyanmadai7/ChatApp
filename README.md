@@ -19,9 +19,9 @@ python manage.py runserver
 ## Open: http://127.0.0.1:8000/
 
 ## Tech Used
-Django
-jQuery
-AJAX
+Django<br>
+jQuery<br>
+AJAX<br>
 HTML/CSS
 
 ## License (MIT)
