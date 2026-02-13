@@ -22,7 +22,8 @@ python manage.py runserver
 Django<br>
 jQuery<br>
 AJAX<br>
-HTML/CSS
+HTML<br>
+CSS
 
 ## License (MIT)
 MIT License
