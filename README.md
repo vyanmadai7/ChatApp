@@ -1,6 +1,6 @@
 ## RealTime Chat App
 
-This is a simple chat app that updates messages in real time. It is built with Django, AJAX, jQuery, and clean HTML/CSS.
+This is a simple chat app that updates messages in real time. It is built with Django, AJAX, jQuery, and HTML/CSS.
 
 ## Features
 
