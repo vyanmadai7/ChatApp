@@ -26,15 +26,15 @@ http://127.0.0.1:8000/
 
 ## Technologies Used
 
-Django
+-Django
 
-jQuery
+-jQuery
 
-AJAX
+-AJAX
 
-HTML
+-HTML
 
-CSS
+-CSS
 
 ## License (MIT)
 MIT License
