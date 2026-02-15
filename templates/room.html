@@ -1,182 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{room}} - DjChat</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
-        integrity="sha256-/xUj+3OJ+Yd2sEwG9DqjZ9Xy3/77f3p9m6h5+3u5kjg=" 
-        crossorigin="anonymous"></script>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 20px;
-    background-color: #fafafa;
-    color: #333;
-  }
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #444;
-  }
+    h2 {
+      background: #764ba2;
+      color: white;
+      margin: 0;
+      padding: 20px;
+      font-size: 1.2rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
 
-  #display {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
+    #display {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: #fdfdfd;
+    }
 
-  .container {
-    display: flex;
-    align-items: flex-start;
-    background-color: #f1f1f1;
-    border: 1px solid #dedede;
-    border-radius: 10px;
-    padding: 15px;
-    transition: background-color 0.2s ease;
-  }
+    .container {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      position: relative;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      background-color: #e9ecef;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
 
-  .container:hover {
-    background-color: #e2e2e2;
-  }
+    .container b {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #764ba2;
+      margin-bottom: 4px;
+    }
 
-  .container img {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    margin-right: 15px;
-  }
+    .container p {
+      margin: 0;
+      color: #333;
+    }
 
-  .message-content {
-    flex: 1;
-  }
+    .time-left {
+      display: block;
+      font-size: 0.7rem;
+      color: #999;
+      margin-top: 5px;
+      text-align: right;
+    }
 
-  .message-content b {
-    display: block;
-    margin-bottom: 5px;
-    color: #222;
-  }
+    .input-container {
+      background: white;
+      padding: 20px;
+      border-top: 1px solid #ddd;
+    }
 
-  .message-content p {
-    margin: 0 0 5px 0;
-    word-wrap: break-word;
-  }
+    #post-form {
+      display: flex;
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-  .time-left {
-    font-size: 0.75rem;
-    color: #888;
-  }
+    input[type=text] {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.05);
-  }
+    input[type=text]:focus {
+      border-color: #764ba2;
+    }
 
-  form input[type="text"] {
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
+    input[type=submit] {
+      background-color: #764ba2;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
 
-  form input[type="submit"] {
-    padding: 12px;
-    border-radius: 6px;
-    border: none;
-    background-color: #4CAF50;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
+    input[type=submit]:hover {
+      background-color: #5a3782;
+      transform: translateY(-1px);
+    }
 
-  form input[type="submit"]:hover {
-    background-color: #45a049;
-  }
-</style>
+    #display::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #display::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
+
 <body>
 
-<h2>{{room}} - DjChat</h2>
+  <h2>{{room}} Room</h2>
 
-<div id="display">
-</div>
+  <div id="display">
+  </div>
 
-<form id="post-form">
-    {% csrf_token %}
-    <input type="hidden" name="username" id="username" value="{{username}}"/>
-    <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
-    <input type="text" name="message" id="message" placeholder="Type a message..." required />
-    <input type="submit" value="Send">
-</form>
+  <div class="input-container">
+    <form id="post-form">
+      {% csrf_token %}
+      <input type="hidden" name="username" id="username" value="{{username}}" />
+      <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}" />
+      <input type="text" name="message" id="message" placeholder="Type your message..." />
+      <input type="submit" value="Send">
+    </form>
+  </div>
 
-<script>
-$(document).ready(function(){
-
-  function renderMessages(messages) {
-      const display = $("#display");
-      display.empty();
-      messages.forEach(msg => {
-          const msgHtml = `
-            <div class="container">
-              <img src="/images/user.png" alt="User Avatar">
-              <div class="message-content">
-                <b>${msg.user}</b>
-                <p>${msg.value}</p>
-                <span class="time-left">${msg.date}</span>
-              </div>
-            </div>`;
-          display.append(msgHtml);
-      });
-      display.scrollTop(display.prop("scrollHeight")); 
-  }
-
-
-  setInterval(() => {
-      $.ajax({
+  <script>
+    $(document).ready(function () {
+      setInterval(function () {
+        $.ajax({
           type: 'GET',
-          url: `/getMessages/{{room}}/`,
-          success: function(response){
-              renderMessages(response.messages);
+          url: "/getMessages/{{room}}/",
+          success: function (response) {
+            $("#display").empty();
+            for (var key in response.messages) {
+              var temp = "<div class='container'><b>" + response.messages[key].user + "</b><p>" + response.messages[key].value + "</p><span class='time-left'>" + response.messages[key].date + "</span></div>";
+              $("#display").append(temp);
+            }
+            var display = document.getElementById('display');
+            display.scrollTop = display.scrollHeight;
           },
-          error: function(){
-              console.error('Failed to fetch messages');
+          error: function (response) {
           }
-      });
-  }, 1000);
+        });
+      }, 1000);
+    })
+  </script>
 
-  $('#post-form').submit(function(e){
+  <script type="text/javascript">
+    $(document).on('submit', '#post-form', function (e) {
       e.preventDefault();
-      const message = $('#message').val().trim();
-      if(!message) return;
-
       $.ajax({
-          type: 'POST',
-          url: '/send',
-          data: {
-              username: $('#username').val(),
-              room_id: $('#room_id').val(),
-              message: message,
-              csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-          },
-          success: function(){ $('#message').val(''); }
+        type: 'POST',
+        url: '/send',
+        data: {
+          username: $('#username').val(),
+          room_id: $('#room_id').val(),
+          message: $('#message').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (data) {
+        }
       });
-  });
-
-});
-</script>
+      document.getElementById('message').value = ''
+    });
+  </script>
 
 </body>
+
 </html>
