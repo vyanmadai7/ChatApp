@@ -1,162 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{room}} - DjChat</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+        integrity="sha256-/xUj+3OJ+Yd2sEwG9DqjZ9Xy3/77f3p9m6h5+3u5kjg=" 
+        crossorigin="anonymous"></script>
 <style>
-body {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 20px;
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #fafafa;
+    color: #333;
+  }
 
-.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-}
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #444;
+  }
 
-.darker {
-  border-color: #ccc;
-  background-color: #ddd;
-}
+  #display {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
 
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+  .container {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f1f1f1;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    padding: 15px;
+    transition: background-color 0.2s ease;
+  }
 
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
+  .container:hover {
+    background-color: #e2e2e2;
+  }
 
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
+  .container img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+  }
 
-.time-right {
-  float: right;
-  color: #aaa;
-}
+  .message-content {
+    flex: 1;
+  }
 
-.time-left {
-  float: left;
-  color: #999;
-}
+  .message-content b {
+    display: block;
+    margin-bottom: 5px;
+    color: #222;
+  }
+
+  .message-content p {
+    margin: 0 0 5px 0;
+    word-wrap: break-word;
+  }
+
+  .time-left {
+    font-size: 0.75rem;
+    color: #888;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  }
+
+  form input[type="text"] {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+  form input[type="submit"] {
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  form input[type="submit"]:hover {
+    background-color: #45a049;
+  }
 </style>
-<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
 </head>
 <body>
 
 <h2>{{room}} - DjChat</h2>
 
 <div id="display">
-
-<!-- <div class="container darker">
-  <b>Tom</b><p>Hello Everyone, How Are You Guys Doing?</p>
-  <span class="time-left">20th, April 2021</span>
-</div> -->
-
 </div>
+
+<form id="post-form">
+    {% csrf_token %}
+    <input type="hidden" name="username" id="username" value="{{username}}"/>
+    <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+    <input type="text" name="message" id="message" placeholder="Type a message..." required />
+    <input type="submit" value="Send">
+</form>
 
 <script>
 $(document).ready(function(){
 
-setInterval(function(){
-    $.ajax({
-        type: 'GET',
-        url : "/getMessages/{{room}}/",
-        success: function(response){
-            console.log(response);
-            $("#display").empty();
-            for (var key in response.messages)
-            {
-                var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
-                $("#display").append(temp);
-            }
-        },
-        error: function(response){
-            alert('An error occured')
-        }
-    });
-},1000);
-})
+  function renderMessages(messages) {
+      const display = $("#display");
+      display.empty();
+      messages.forEach(msg => {
+          const msgHtml = `
+            <div class="container">
+              <img src="/images/user.png" alt="User Avatar">
+              <div class="message-content">
+                <b>${msg.user}</b>
+                <p>${msg.value}</p>
+                <span class="time-left">${msg.date}</span>
+              </div>
+            </div>`;
+          display.append(msgHtml);
+      });
+      display.scrollTop(display.prop("scrollHeight")); 
+  }
+
+
+  setInterval(() => {
+      $.ajax({
+          type: 'GET',
+          url: `/getMessages/{{room}}/`,
+          success: function(response){
+              renderMessages(response.messages);
+          },
+          error: function(){
+              console.error('Failed to fetch messages');
+          }
+      });
+  }, 1000);
+
+  $('#post-form').submit(function(e){
+      e.preventDefault();
+      const message = $('#message').val().trim();
+      if(!message) return;
+
+      $.ajax({
+          type: 'POST',
+          url: '/send',
+          data: {
+              username: $('#username').val(),
+              room_id: $('#room_id').val(),
+              message: message,
+              csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+          },
+          success: function(){ $('#message').val(''); }
+      });
+  });
+
+});
 </script>
-
-
-<div class="container">
-    <style>
-    input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    }
-
-    input[type=submit] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-    background-color: #45a049;
-    }
-
-    div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    }
-    </style>
-
-    <form id="post-form">
-        {% csrf_token %}
-        <input type="hidden" name="username" id="username" value="{{username}}"/>
-        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
-        <input type="text" name="message" id="message" width="100px" />
-        <input type="submit" value="Send">
-    </form>
-</div>
-
 
 </body>
-
-<script type="text/javascript">
-  $(document).on('submit','#post-form',function(e){
-    e.preventDefault();
-
-    $.ajax({
-      type:'POST',
-      url:'/send',
-      data:{
-          username:$('#username').val(),
-          room_id:$('#room_id').val(),
-          message:$('#message').val(),
-        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-      },
-      success: function(data){
-         //alert(data)
-      }
-    });
-    document.getElementById('message').value = ''
-  });
-</script>
-
 </html>
